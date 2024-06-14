@@ -1,68 +1,48 @@
-// Register form submit event
-const registerForm = document.getElementById('registerForm');
-registerForm.addEventListener('submit', function(event) {
-  event.preventDefault();
-  const username = document.getElementById('username').value;
-  const password = document.getElementById('password').value;
-  registerUser(username, password);
-});
-
-// Login form submit event
-const loginForm = document.getElementById('loginForm');
-loginForm.addEventListener('submit', function(event) {
-  event.preventDefault();
-  const username = document.getElementById('username').value;
-  const password = document.getElementById('password').value;
-  loginUser(username, password);
-});
-
-// Generate Linkvertise button click event
+// Get the button and points element
 const generateLinkBtn = document.getElementById('generateLinkBtn');
-generateLinkBtn.addEventListener('click', generateLinkvertise);
+const pointsElement = document.getElementById('points');
 
-// Function to register a user
-function registerUser(username, password) {
-  // Perform registration logic here
-  // You can use localStorage or a server-side database to store user information
-  // Example using localStorage:
-  localStorage.setItem('username', username);
-  localStorage.setItem('password', password);
-  alert('Registration successful!');
-  window.location.href = 'login.html';
-}
+// Get the current points from the cookie
+let points = getCookie('points') || 0;
 
-// Function to login a user
-function loginUser(username, password) {
-  // Perform login logic here
-  // You can compare the entered username and password with the stored values
-  // Example using localStorage:
-  const storedUsername = localStorage.getItem('username');
-  const storedPassword = localStorage.getItem('password');
-  if (username === storedUsername && password === storedPassword) {
-    alert('Login successful!');
-    window.location.href = 'linkvertise.html';
-  } else {
-    alert('Invalid username or password!');
-  }
-}
+// Update the points element with the initial value
+pointsElement.textContent = points;
 
 // Function to generate Linkvertise
 function generateLinkvertise() {
   const linkvertiseLink = "https://link-center.net/1189635/test";
 
-  // Get the current points from localStorage
-  let points = localStorage.getItem('points') || 0;
-
   // Increase points by 1
-  points= parseInt(points) + 1;
+  points++;
 
-  // Update the points in localStorage
-  localStorage.setItem('points', points);
-
-  // Update the points on the page
-  const pointsElement = document.getElementById('points');
+  // Update points element
   pointsElement.textContent = points;
 
-  // Open the Linkvertise link
-  window.open(linkvertiseLink);
+  // Set the points cookie
+  setCookie('points', points, 7); // Expires in 7 days
+
+  // Open Linkvertise link in the same window
+  window.location.href = linkvertiseLink;
+}
+
+// Add event listener to the button
+generateLinkBtn.addEventListener('click', generateLinkvertise);
+
+// Function to set a cookie
+function setCookie(name, value, days) {
+  const expires = new Date();
+  expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+  document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+}
+
+// Function to get a cookie value
+function getCookie(name) {
+  const cookieArr = document.cookie.split(';');
+  for (let i = 0; i < cookieArr.length; i++) {
+    const cookiePair = cookieArr[i].split('=');
+    if (cookiePair[0].trim() === name) {
+      return cookiePair[1];
+    }
+  }
+  return null;
 }
