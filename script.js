@@ -10,7 +10,7 @@ pointsElement.textContent = points;
 
 // Function to generate Linkvertise
 function generateLinkvertise() {
-  const linkvertiseLink = "https://link-center.net/1189635/test";
+  const linkvertiseLink = "https://link-center.net/1189635/hmm";
 
   // Increase points by 1
   points++;
